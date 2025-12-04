@@ -49,7 +49,7 @@ Items dropItem(const char name[]) {
   }
   
   Item notFound;
-  strcpy(NotFound.name, "NULL");
+  strcpy(notFound.name, "NULL");
   return notFound;
 }
 
