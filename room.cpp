@@ -1,10 +1,10 @@
-#include "room.h"
-
+#include "room.h" //inherit from h file
+//room constrctors -> description, add exit, get exit
 Room::Room(const char* desc) {
   strcpy(description,desc);
 }
 
-const char* getDescription() {
+const char* Room::getDescription() {
   return description;
 }
 
@@ -18,15 +18,16 @@ void Room::addExit(const char* direction, Room* neighbor) {
 Room* Room::getExit(const char* direction) {
   for (int i = 0; i < exits.size(); i++) {
     if (strcmp(exits[i].direction, direction) == 0) {
-      return exits[i].toRoom;
+      return exits[i].goRoom;
     }
   }
+  return nullptr;
 }
 
 vector<Exit>& Room::getExits() {
   return exits;
 }
-
+//items -> add item, has item, drop item, vector return
 void Room::addItem(const Items& item) {
   items.push_back(item);
 }
@@ -37,18 +38,19 @@ bool Room::hasItem(const char name[]) {
      return true;
    }
  }
+ return false;
 }
 
-Items dropItem(const char name[]) {
+Items Room::dropItem(const char name[]) {
   for (int i = 0; i < items.size(); i++) {
     if (strcmp(items[i].name, name) == 0) {
-      Item temp = items[i];
+      Items temp = items[i];
       items.erase(items.begin() + i);
       return temp;
     }
   }
   
-  Item notFound;
+  Items notFound;
   strcpy(notFound.name, "NULL");
   return notFound;
 }

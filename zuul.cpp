@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
-#include "room.cpp"
+#include "room.h"
 using namespace std;
 
 int main () {
+//room instances
   Room* Room205 = new Room("This is Room 205, one of the five boring office rooms. The walls are peeling.");
   Room* Room206 = new Room("This is Room 206, one of the five boring office rooms. There is a coffee machine.");
   Room* Room207 = new Room("This is Room 207, one of the five boring office rooms. Two people are arguing about phones.");
@@ -28,7 +29,7 @@ int main () {
   Room* PetStore = new Room("This is the pet store, it gives you memories of when you first bought your dog.");
   Room* Grocery = new Room("This is the grocery, it is where you get all your food. The produce is fresh as usual. However, a tomato is a bit shinier than usual.");
   Room* Arcade = new Room("The arcade is where most of the 10 year olds go. You can see a disgruntled employee that looks like they may faint");
-
+//room directions
   Room205->addExit("NORTH", Room208);
   Room205->addExit("WEST", Room206);
   Room205->addExit("SOUTH", CouncilChamber);
@@ -49,6 +50,7 @@ int main () {
 
   CouncilChamber->addExit("WEST", PublicSpace);
   CouncilChamber->addExit("SOUTH", TownHall);
+  CouncilChamber->addExit("NORTH", Room205);
 
   Looter->addExit("EAST", Outskirts);
   Looter->addExit("SOUTH", ElmStreet);
@@ -118,27 +120,27 @@ int main () {
 
   vector<Items> inventory;
   Room* current = Home;  
-
+//beginning lines with directions and commands
   cout << "Welcome to the Sentience!" << endl;
-  cout << "Your goal: Find all 5 keys(ruby,topaz,citrine,emerald,and sapphire) and drop them into the VAULT." << endl;
+  cout << "Your goal: Find all 5 keys(ruby,topaz,citrine,emerald,and sapphire) and drop them into the DOG room." << endl;
   cout << "Commands: GO <direction>, GET <item>, DROP <item>, INVENTORY, QUIT:" << endl;
   char command[50];
-
+//bool statement
   bool running = true;
-
+//while loop for text adventure
   while (running) {
-
+    //space line to make game neater and get description   
     cout << "\n-------------------------------------\n";
     cout << current->getDescription() << "\n";
 
-    // Show exits
+    //show exits
     cout << "Exits: ";
     for (auto &e : current->getExits()) {
       cout << e.direction << " ";
     }
         cout << endl;
 
-    // Show items in room
+    //show items in room
     cout << "Items here: ";
     if (current->getItems().size() == 0) {
       cout << "None";
@@ -146,21 +148,94 @@ int main () {
     else {
       for (auto &i : current->getItems())
         cout << i.name << " ";
-      }
-      cout << endl;
+    }
+    cout << endl;
 
-      cout << "> ";
-      cin.getline(command, 50);
+    cout << "> ";
+    cin.getline(command, 50);
 
-    // Parsing
+    //parsing
     char first[20];
     char second[20];
     first[0] = second[0] = '\0';
     sscanf(command, "%s %s", first, second); //for this part I was confused how to parse so I search up how to place words together and it states the sscanfcommand is vital
+    //QUIT 
     if (strcmp(first, "QUIT") == 0) {
       cout << "Thank you for playing";	    
       running = false;
     }
-//finish rest of fuunctions later today and tmrw -> task
+    //GO (movement)
+    if (strcmp(first, "GO") == 0) {
+      Room* next = current->getExit(second);
+      if (next == nullptr) {
+        cout << "You can't go that way.\n";
+      } else {
+        current = next;
+      }
+    }
 
+    //GET (pick up item)
+    else if (strcmp(first, "GET") == 0) {
+      bool found = false;
+      auto &items = current->getItems();
+
+      for (int i = 0; i < items.size(); i++) {
+        if (strcmp(items[i].name, second) == 0) {
+          inventory.push_back(items[i]);
+          items.erase(items.begin() + i);
+          cout << "Picked up " << second << endl;
+          found = true;
+          break;
+        }
+      }
+      if (!found) cout << "Item not found here.\n";
+    }
+
+    //DROP (drop item)
+    else if (strcmp(first, "DROP") == 0) {
+      bool dropped = false;
+
+      for (int i = 0; i < inventory.size(); i++) {
+        if (strcmp(inventory[i].name, second) == 0) {
+          current->addItem(inventory[i]);
+          inventory.erase(inventory.begin() + i);
+          cout << "Dropped " << second << endl;
+          dropped = true;
+          break;
+        }
+      }
+      if (!dropped) cout << "You don't have that item.\n";
+    }
+
+    //INVENTORY
+    else if (strcmp(first, "INVENTORY") == 0) {
+      cout << "Your inventory: ";
+      if (inventory.size() == 0) {
+        cout << "Empty.\n";
+      } else {
+        for (auto &i : inventory)
+          cout << i.name << " ";
+        cout << endl;
+      }
+    }
+
+    //WIN CONDITION 
+    if (current == winningRoom) {
+      int count = 0;
+      for (auto &i : current->getItems()) {
+        if (strcmp(i.name, "rubyKey") == 0 ||
+            strcmp(i.name, "topazKey") == 0 ||
+            strcmp(i.name, "citrineKey") == 0 ||
+            strcmp(i.name, "emeraldKey") == 0 ||
+            strcmp(i.name, "sapphireKey") == 0) {
+          count++;
+        }
+      }
+      if (count == 5) {
+        cout << "\nYOU WIN! Your dog thanks you for bringing all 5 keys to the vault, and stops its irrational behavior. Will that happen again?\n";
+        running = false;
+      }
+    }
+
+  }
 } 

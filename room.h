@@ -6,17 +6,17 @@
 #include <vector>
 #include "items.h"
 using namespace std;
-
+//struct for exit
 struct Exit {
   char direction[20];
   class Room* goRoom;
-}
-
+};
+//constructors and variables
 class Room {
   private:
     char description[200];
     vector<Exit> exits;
-    vector<Items> item;
+    vector<Items> items;
   public:
     Room(const char* desc);
     const char* getDescription();
