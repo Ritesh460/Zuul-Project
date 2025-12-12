@@ -5,30 +5,56 @@
 using namespace std;
 
 int main () {
+//room storage for deletion
+  vector<Room*> rooms;
+  
 //room instances
   Room* Room205 = new Room("This is Room 205, one of the five boring office rooms. The walls are peeling.");
+  rooms.push_back(Room205);
   Room* Room206 = new Room("This is Room 206, one of the five boring office rooms. There is a coffee machine.");
+  rooms.push_back(Room206);
   Room* Room207 = new Room("This is Room 207, one of the five boring office rooms. Two people are arguing about phones.");
+  rooms.push_back(Room207);
   Room* Room208 = new Room("This is Room 208, one of the five boring office rooms. The couches are very green.");
+  rooms.push_back(Room208);
   Room* Room209 = new Room("This is Room 209, one of the five boring office rooms. Someone is eating a banana.");
+  rooms.push_back(Room209);
   Room* PublicSpace = new Room("This is the public space, people are chatting all around. There are some lawyers and convicts talking with eachother.");
+  rooms.push_back(PublicSpace);
   Room* CouncilChamber = new Room("This is the council chamber, 20 council members are discussing taxes that need to be eliminated");
+  rooms.push_back(CouncilChamber);
   Room* Looter = new Room("There is a looter in this deep alleyway. They try to steal your stuff but you block them easily. However, they drop something blue.");
+  rooms.push_back(Looter);
   Room* Outskirts = new Room("You are now in the outskirts of the city. Any further from here is illegal. Do you dare to go?");
+  rooms.push_back(Outskirts);
   Room* GlitchyStreet = new Room("You ventured toward the glitchy street. Cars are split in half and floating in the air. The street is seperated and moving constantly. There is nobody here.");
+  rooms.push_back(GlitchyStreet);
   Room* TheHole = new Room("You went even more and now see a massive sinkhole. It is surrounded by orange flower petals.");
+  rooms.push_back(TheHole);
   Room* TownHall = new Room("A wedding is taking place in the town hall right now. You sneak in and take some cake.");
+  rooms.push_back(TownHall);
   Room* CedarStreet = new Room("This street has several cedar trees that the sidewalk is almost hard to cross.");
+  rooms.push_back(CedarStreet);
   Room* GemShop = new Room("This gemshop cuts gems in order to show their true beauty, not the raw.");
+  rooms.push_back(GemShop);
   Room* OakStreet = new Room("This is Oak street, it has a roundabout in the middle where a Grand Oak Tree stands. Many people go here for a tourist destination.");
+  rooms.push_back(OakStreet);
   Room* RedHouse = new Room("This is an abandoned barn that is falling apart. You thought ruby key would be here lol.");
+  rooms.push_back(RedHouse);
   Room* YellowHouse = new Room("This is your neighbor's house. They invite you in and you see a whole display of yellow keys.");
+  rooms.push_back(YellowHouse);
   Room* Home = new Room("This is your house. You are a regular person who does regular things.");
+  rooms.push_back(Home);
   Room* Dog = new Room("This is your dog's room, your dog is barking constantly. However, it starts speaking English and states that you need to bring 5 keys and drop them at the dog.");
+  rooms.push_back(Dog);
   Room* ElmStreet = new Room("This is Elm Street, it is very chaotic. Parades happen every single week on a Friday.");
+  rooms.push_back(ElmStreet);
   Room* PetStore = new Room("This is the pet store, it gives you memories of when you first bought your dog.");
+  rooms.push_back(PetStore);
   Room* Grocery = new Room("This is the grocery, it is where you get all your food. The produce is fresh as usual. However, a tomato is a bit shinier than usual.");
+  rooms.push_back(Grocery);
   Room* Arcade = new Room("The arcade is where most of the 10 year olds go. You can see a disgruntled employee that looks like they may faint");
+  rooms.push_back(Arcade);
 //room directions
   Room205->addExit("NORTH", Room208);
   Room205->addExit("WEST", Room206);
@@ -238,4 +264,10 @@ int main () {
     }
 
   }
+  //delete all rooms 
+  for (Room* r : rooms) {
+    delete r;
+  }
+
+  return 0;
 } 
